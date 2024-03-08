@@ -1,0 +1,50 @@
+## JAGS model
+      
+	model{
+    
+    # -------
+    # PRIORS
+  
+    # set priors
+
+    amean <- aprior[1] / nstepd
+    atau <- 1 / ((aprior[2] / nstepd) ^ 2)
+    rmean <- rprior[1] / nstepd
+    rtau <- 1 / ((rprior[2] / nstepd) ^ 2)
+    bmean <- bprior[1] / (100 * 3600 / interval)
+    btau <- 1 / ((bprior[2] / (100 * 3600 / interval)) ^ 2)
+    bupp <- bmax / (100 * 3600 / interval)
+    
+    a ~ dnorm(amean, atau)T(0,)
+    r ~ dnorm(rmean, rtau)T(0,)
+    b ~ dnorm(bmean, btau)T(0,bupp)
+  
+    tau ~ dgamma(1,0.001)
+    
+    #--------
+
+    # model
+    
+    # DO modelled
+    zz ~ dnorm(0,1000000)
+    DO_mod[1] <- DO_start + zz # make monitorable
+    
+    for (i in 1:(num.measurements-1)){		
+      
+      DO_obs[i+1] ~ dnorm(DO_mod[i+1], tau)
+      DO_mod[i+1] <- DO_mod[i] 
+        + a * PAR[i] 
+        - r 
+        - (1 / Z) * (-b * pow(U10[i], 2) * pow(sc[i] / 600, -0.5) * (DO_sat[i] - DO_mod[i]))
+      
+      # posterior predictive assessment nodes #
+      ats[i] <- a 
+      bts[i] <- b
+      gppts[i] <- a * PAR[i]
+      erts[i] <- r
+      gets[i] <- (1 / Z) * (b * pow(U10[i], 2) * pow(sc[i] / 600, -0.5) * (DO_sat[i] - DO_mod[i]))
+      
+    }
+    
+}
+          
