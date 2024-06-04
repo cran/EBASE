@@ -1,8 +1,8 @@
 Package: EBASE
 Title: Estuarine Bayesian Single-Station Estimation Method for
         Ecosystem Metabolism
-Version: 1.0.1
-Date: 2024-03-22
+Version: 1.0.2
+Date: 2024-06-04
 Authors@R: c(
     person(given = "Marcus",
       family = "Beck",
@@ -34,6 +34,7 @@ Description: Estimate ecosystem metabolism in a Bayesian framework for
   estimates of parameters for gross primary production, respiration,
   and gas exchange. Methods adapted from Grace et al. (2015)
   <doi:10.1002/lom3.10011> and Wanninkhof (2014) <doi:10.4319/lom.2014.12.351>.
+  Details in Beck et al. (2024) <doi:10.1002/lom3.10620>.
 Depends: R (>= 3.5)
 Imports: dplyr, foreach, ggplot2 (>= 3.4.0), lubridate, R2jags (>=
         0.6.1), rjags (>= 4.10), tidyr, truncnorm, zoo
@@ -50,11 +51,11 @@ LazyDataCompression: xz
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2024-03-22 20:29:34 UTC; MarcusBeck
+Packaged: 2024-06-04 13:47:55 UTC; MarcusBeck
 Author: Marcus Beck [aut, cre] (<https://orcid.org/0000-0002-4996-0059>),
   Maria Herrmann [aut],
   Jill Arriola [aut] (<https://orcid.org/0000-0003-2173-8349>),
   Raymond Najjar [aut] (<https://orcid.org/0000-0002-2960-5965>)
 Maintainer: Marcus Beck <mbeck@tbep.org>
 Repository: CRAN
-Date/Publication: 2024-03-22 20:40:02 UTC
+Date/Publication: 2024-06-04 16:30:01 UTC
