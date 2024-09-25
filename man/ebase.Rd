@@ -13,6 +13,7 @@ ebase(
   rprior = c(300, 150),
   bprior = c(0.251, 0.125),
   bmax = 0.502,
+  nogas = FALSE,
   doave = TRUE,
   maxinterp = 43200/interval,
   n.iter = 10000,
@@ -20,7 +21,6 @@ ebase(
   n.burnin = n.iter * 0.5,
   n.chains = 3,
   n.thin = 10,
-  progress = NULL,
   model_file = NULL
 )
 }
@@ -41,6 +41,8 @@ ebase(
 
 \item{bmax}{numeric value for the upper limit on the prior distribution for \code{bprior}, set as twice the default value of the mean}
 
+\item{nogas}{logical indicating if gas exchange is not included in the metabolic model, see details}
+
 \item{doave}{logical indicating if the average dissolved oxygen concentration is used as the starting value for the estimation (default), otherwise the first observation will be used if \code{FALSE}, see details}
 
 \item{maxinterp}{numeric value for minimum number of continuous observations that must not be interpolated within a group defined by \code{ndays} to assign as \code{NA} in output, see details}
@@ -55,16 +57,16 @@ ebase(
 
 \item{n.thin}{number of nth iterations to save for each chain, passed to \code{\link[R2jags]{jags}}}
 
-\item{progress}{character string of path where progress is saved to as 'log.txt', use \code{NULL} to suppress (default)}
-
 \item{model_file}{\code{NULL} to use the model file included with the package or a path to a model text file can be used}
 }
 \value{
-A data frame with metabolic estimates for areal gross production (\code{P}, O2 mmol m-2 d-1), respiration (\code{R},  O2 mmol m-2 d-1), and gas exchange (\code{D}, O2 mmol m-2 d-1, positive values as ingassing, negative values as outgassing).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of (mmol m-2 d-1)/(W m-2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol m-3), modeled dissolved oxygen (\code{DO_mod}, mmol m-3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol m-3 d-1) are also returned.  Note that delta dissolved oxygen is a daily rate.
+A data frame with metabolic estimates for areal gross production (\code{P}, O2 mmol m-2 d-1), respiration (\code{R},  O2 mmol m-2 d-1), and gas exchange (\code{D}, O2 mmol m-2 d-1, positive values as ingassing, negative values as outgassing).  \code{NEM} (net ecosystem metabolism, O2 mmol m-2 d-1) is also returned as \code{P} - \code{R}. Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of (mmol m-2 d-1)/(W m-2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol m-3), modeled dissolved oxygen (\code{DO_mod}, mmol m-3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol m-3 d-1) are also returned.  Note that delta dissolved oxygen is a daily rate.
 
 95\% credible intervals for \code{a}, \code{b}, and \code{R} are also returned in the corresponding columns \code{alo}, \code{ahi}, \code{blo}, \code{bhi}, \code{Rlo}, and \code{Rhi}, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95\% probability that the true parameter is in this range. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by \code{ndays}.
 
 Model fit can also be assessed using the \code{converge} and \code{rsq} columns.  The values in these columns apply to each group in the \code{grp} column as specified with the \code{ndays} argument. The \code{converge} column indicates \code{"Check convergence"} or \code{"Fine"} if the JAGS estimate converged at that iteration (repeated across rows for the group).  The \code{n.chains} argument can be increased if convergence is not achieved. Similarly, the \code{rsq} column shows the r-squared values of the linear fit between the modeled and observed dissolved oxygen (repeated across rows for the group).  These values can also be viewed with \code{\link{fit_plot}}.
+
+The \code{nogas} argument can be set to \code{TRUE} to exclude gas exchange from the metabolic estimates.  This will force the prior distribution for \code{b} as mean 0 and standard deviation approximately 0.
 }
 \description{
 Estuarine Bayesian Single-station Estimation method for ecosystem metabolism
@@ -79,6 +81,10 @@ The metabolic estimates are based on a mass balance equation in Grace et al. 201
 More simply:
 
 \deqn{ Z\frac{dC_d}{dt} = P - R + D}
+
+Net ecosystem metabolism (NEM) is then estimated as:
+
+\deqn{NEM = P - R}
 
 Gross production is provided by \emph{aPAR}, respiration is provided by \emph{R}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{R}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration at each time step is also returned for comparison to observed as one measure of model performance.
 

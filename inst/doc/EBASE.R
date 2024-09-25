@@ -33,6 +33,9 @@ ebase_plot(res)
 ## ----fig.height = 3, fig.width = 9--------------------------------------------
 ebase_plot(res, instantaneous = FALSE)
 
+## ----fig.height = 3, fig.width = 9--------------------------------------------
+ebase_plot(res, asnem = T)
+
 ## -----------------------------------------------------------------------------
 # setup parallel backend
 library(doParallel)

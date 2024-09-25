@@ -1,8 +1,8 @@
 Package: EBASE
 Title: Estuarine Bayesian Single-Station Estimation Method for
         Ecosystem Metabolism
-Version: 1.0.2
-Date: 2024-06-04
+Version: 1.1.0
+Date: 2024-09-25
 Authors@R: c(
     person(given = "Marcus",
       family = "Beck",
@@ -36,9 +36,9 @@ Description: Estimate ecosystem metabolism in a Bayesian framework for
   <doi:10.1002/lom3.10011> and Wanninkhof (2014) <doi:10.4319/lom.2014.12.351>.
   Details in Beck et al. (2024) <doi:10.1002/lom3.10620>.
 Depends: R (>= 3.5)
-Imports: dplyr, foreach, ggplot2 (>= 3.4.0), lubridate, R2jags (>=
-        0.6.1), rjags (>= 4.10), tidyr, truncnorm, zoo
-Suggests: testthat (>= 3.0.0), doParallel, knitr, rmarkdown, covr
+Imports: doParallel, dplyr, foreach, ggplot2 (>= 3.4.0), lubridate,
+        R2jags (>= 0.6.1), rjags (>= 4.10), tidyr, truncnorm, zoo
+Suggests: testthat (>= 3.0.0), knitr, rmarkdown, covr
 License: CC0
 SystemRequirements: JAGS 4.x.y (https://mcmc-jags.sourceforge.net)
 Encoding: UTF-8
@@ -51,11 +51,11 @@ LazyDataCompression: xz
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2024-06-04 13:47:55 UTC; MarcusBeck
+Packaged: 2024-09-25 15:29:23 UTC; mbeck
 Author: Marcus Beck [aut, cre] (<https://orcid.org/0000-0002-4996-0059>),
   Maria Herrmann [aut],
   Jill Arriola [aut] (<https://orcid.org/0000-0003-2173-8349>),
   Raymond Najjar [aut] (<https://orcid.org/0000-0002-2960-5965>)
 Maintainer: Marcus Beck <mbeck@tbep.org>
 Repository: CRAN
-Date/Publication: 2024-06-04 16:30:01 UTC
+Date/Publication: 2024-09-25 17:30:02 UTC
